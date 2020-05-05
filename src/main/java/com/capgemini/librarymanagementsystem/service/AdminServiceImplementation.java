@@ -1,84 +1,87 @@
 package com.capgemini.librarymanagementsystem.service;
 
 import java.util.List;
-
 import com.capgemini.librarymanagementsystem.dao.AdminDAO;
-import com.capgemini.librarymanagementsystem.database.Database;
-import com.capgemini.librarymanagementsystem.dto.Admininformation;
-import com.capgemini.librarymanagementsystem.dto.BooksInformation;
-import com.capgemini.librarymanagementsystem.dto.RequestInformation;
-import com.capgemini.librarymanagementsystem.dto.UserInformation;
-import com.capgemini.librarymanagementsystem.exception.LibrarayManagementExceptions;
-import com.capgemini.librarymanagementsystem.factory.LMSFactory;
+import com.capgemini.librarymanagementsystem.dto.AdminDetails;
+import com.capgemini.librarymanagementsystem.dto.BooksDetails;
+import com.capgemini.librarymanagementsystem.dto.RequestDetails;
+import com.capgemini.librarymanagementsystem.dto.UserDetails;
+import com.capgemini.librarymanagementsystem.factory.LibraryManagmentSystemFactory;
 
 public class AdminServiceImplementation implements AdminService {
 
-	private AdminDAO admindao = LMSFactory.getadminDao();
+	private AdminDAO admindao = LibraryManagmentSystemFactory.getadminDao();
 
 	@Override
-	public boolean register(UserInformation userInfo) {
-
-		return admindao.register(userInfo);
-	}
-
-	@Override
-	public Admininformation adminLogin(String adminEmailId, String adminPassword) {
+	public AdminDetails adminLogin(String adminEmailId, String adminPassword) {
 
 		return admindao.adminLogin(adminEmailId, adminPassword);
 	}
 
 	@Override
-	public boolean isBookAdded(BooksInformation bookInfo) {
+	public boolean enrollUser(UserDetails userInfo) {
+
+		return admindao.enrollUser(userInfo);
+	}
+
+	@Override
+	public boolean isBookAdded(BooksDetails bookInfo) {
 
 		return admindao.isBookAdded(bookInfo);
+	}
+
+	@Override
+	public BooksDetails searchBook(int bookId) {
+
+		return admindao.searchBook(bookId);
+	}
+
+	@Override
+	public BooksDetails searchBookByName(String bookName) {
+
+		return admindao.searchBookByName(bookName);
+	}
+
+	@Override
+	public BooksDetails searchBookByAuthorName(String bookAuthor) {
+
+		return admindao.searchBookByAuthorName(bookAuthor);
+	}
+
+	@Override
+	public List<UserDetails> showAllUsers() {
+
+		return admindao.showAllUsers();
+	}
+
+	@Override
+	public List<BooksDetails> showAllLibraryBooks() {
+
+		return admindao.showAllLibraryBooks();
+	}
+
+	@Override
+	public List<RequestDetails> showAllUserRequest() {
+
+		return admindao.showAllUserRequest();
+	}
+
+	@Override
+	public boolean isBookIssued(UserDetails user, BooksDetails book) {
+
+		return admindao.isBookIssued(user, book);
+	}
+
+	@Override
+	public boolean isBookReceived(UserDetails userInfo, BooksDetails bookInfo) {
+
+		return admindao.isBookReceived(userInfo, bookInfo);
 	}
 
 	@Override
 	public boolean isBookRemoved(int bookId) {
 
 		return admindao.isBookRemoved(bookId);
-	}
-
-	@Override
-	public BooksInformation searchBook(int bookId) {
-
-		return admindao.searchBook(bookId);
-	}
-
-	@Override
-	public boolean isBookIssued(UserInformation user, BooksInformation book) {
-
-		return admindao.isBookIssued(user, book);
-	}
-
-	@Override
-	public boolean isBookReceived(UserInformation userInfo, BooksInformation bookInfo) {
-
-		return admindao.isBookReceived(userInfo, bookInfo);
-	}
-
-	@Override
-	public boolean isBookUpdated(int bookId) {
-
-		return admindao.isBookUpdated(bookId);
-	}
-
-	@Override
-	public List<BooksInformation> showAllLibraryBooks() {
-
-		return admindao.showAllLibraryBooks();
-	}
-
-	@Override
-	public List<UserInformation> showAllUsers() {
-
-		return admindao.showAllUsers();
-	}
-
-	@Override
-	public List<RequestInformation> showAllUserRequest() {
-
-		return admindao.showAllUserRequest();
 	}
 
 }

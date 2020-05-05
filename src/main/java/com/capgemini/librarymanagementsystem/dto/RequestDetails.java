@@ -1,29 +1,28 @@
 package com.capgemini.librarymanagementsystem.dto;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
-public class RequestInformation implements Serializable {
-	
-	private BooksInformation bookInformation;
-	private UserInformation userInformation;
+@SuppressWarnings("serial")
+public class RequestDetails implements Serializable {
+
+	private BooksDetails bookDetails;
+	private UserDetails userDetails;
 	private boolean isBookIssued;
 	private boolean isBookReturned;
 	private Date bookIssuedDate;
 	private Date bookReturndate;
-	
-	public BooksInformation getBookInformation() {
-		return bookInformation;
+	public BooksDetails getBookDetails() {
+		return bookDetails;
 	}
-	public void setBookInformation(BooksInformation bookInformation) {
-		this.bookInformation = bookInformation;
+	public void setBookDetails(BooksDetails bookDetails) {
+		this.bookDetails = bookDetails;
 	}
-	public UserInformation getUserInformation() {
-		return userInformation;
+	public UserDetails getUserDetails() {
+		return userDetails;
 	}
-	public void setUserInformation(UserInformation userInformation) {
-		this.userInformation = userInformation;
+	public void setUserDetails(UserDetails userDetails) {
+		this.userDetails = userDetails;
 	}
 	public boolean isBookIssued() {
 		return isBookIssued;
@@ -50,4 +49,5 @@ public class RequestInformation implements Serializable {
 		this.bookReturndate = bookReturndate;
 	}
 
+	
 }

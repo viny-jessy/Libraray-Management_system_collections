@@ -2,17 +2,16 @@ package com.capgemini.librarymanagementsystem.database;
 
 import java.util.LinkedList;
 import java.util.List;
+import com.capgemini.librarymanagementsystem.dto.AdminDetails;
+import com.capgemini.librarymanagementsystem.dto.BooksDetails;
+import com.capgemini.librarymanagementsystem.dto.RequestDetails;
+import com.capgemini.librarymanagementsystem.dto.UserDetails;
 
-import com.capgemini.librarymanagementsystem.dto.Admininformation;
-import com.capgemini.librarymanagementsystem.dto.BooksInformation;
-import com.capgemini.librarymanagementsystem.dto.RequestInformation;
-import com.capgemini.librarymanagementsystem.dto.UserInformation;
+public class DataBase {
 
-public class Database {
-
-	public static final List<UserInformation> USERS = new LinkedList<UserInformation>();
-	public static final List<Admininformation> ADMIN = new LinkedList<Admininformation>();
-	public static final List<BooksInformation> BOOK = new LinkedList<BooksInformation>();
-	public static final List<RequestInformation> REQUEST = new LinkedList<RequestInformation>();
+	public static final List<UserDetails> USERDATABASE = new LinkedList<UserDetails>();
+	public static final List<AdminDetails> ADMINDATABASE = new LinkedList<AdminDetails>();
+	public static final List<BooksDetails> BOOKDATABASE = new LinkedList<BooksDetails>();
+	public static final List<RequestDetails> REQUESTDATABASE = new LinkedList<RequestDetails>();
 
 }

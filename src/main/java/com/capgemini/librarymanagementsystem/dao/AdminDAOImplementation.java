@@ -1,71 +1,80 @@
 package com.capgemini.librarymanagementsystem.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.capgemini.librarymanagementsystem.database.Database;
-import com.capgemini.librarymanagementsystem.dto.Admininformation;
-import com.capgemini.librarymanagementsystem.dto.BooksInformation;
-import com.capgemini.librarymanagementsystem.dto.RequestInformation;
-import com.capgemini.librarymanagementsystem.dto.UserInformation;
+import com.capgemini.librarymanagementsystem.database.DataBase;
+import com.capgemini.librarymanagementsystem.dto.AdminDetails;
+import com.capgemini.librarymanagementsystem.dto.BooksDetails;
+import com.capgemini.librarymanagementsystem.dto.RequestDetails;
+import com.capgemini.librarymanagementsystem.dto.UserDetails;
 import com.capgemini.librarymanagementsystem.exception.LibrarayManagementExceptions;
 
 public class AdminDAOImplementation implements AdminDAO {
-	Calendar  calender = Calendar.getInstance();
-	Date date = new Date();
-	Date returnDate = new Date();
-	Date actualReturnDate = new Date(); 
+	
+	Calendar calendar = Calendar.getInstance();
+	Date issueDate = new Date();
+	Date actualReturnDate = calendar.getTime();
+	Date expectedReturnedDate = new Date();
+	Date bookReturnDate = new Date();
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	String todayDate = simpleDateFormat.format(calendar.getTime());
+	String returnDate = simpleDateFormat.format(actualReturnDate);
 
 	@Override
-	public boolean register(UserInformation user) {
+	public AdminDetails adminLogin(String adminEmailId, String adminPassword) {
 
-		for (UserInformation user1 : Database.USERS) {
-			if ((user1.getUserId() == user.getUserId())) {
-				return false;
-			}
+		AdminDetails admin = new AdminDetails();
 
-		}
-		Database.USERS.add(user);
-
-		return true;
-	}
-
-	@Override
-	public Admininformation adminLogin(String adminEmailId, String adminPassword) {
-		Admininformation admin = new Admininformation();
-		if (admin.getEmail().equals(adminEmailId) && admin.getPassword().equals(adminPassword)) {
+		if (admin.getAdminEmailId().equals(adminEmailId) && admin.getAdminPassword().equals(adminPassword)) {
 			return admin;
 		}
 		throw new LibrarayManagementExceptions("Admin invlaid login credentials!");
 	}
 
 	@Override
-	public boolean isBookAdded(BooksInformation bookInfo) {
-		for (BooksInformation bookBean : Database.BOOK) {
+	public boolean enrollUser(UserDetails user) {
+
+		for (UserDetails user1 : DataBase.USERDATABASE) {
+			if (user1.getUserId() == user.getUserId()) {
+				return false;
+			}
+
+		}
+		DataBase.USERDATABASE.add(user);
+
+		return true;
+	}
+
+	@Override
+	public boolean isBookAdded(BooksDetails bookInfo) {
+
+		for (BooksDetails bookBean : DataBase.BOOKDATABASE) {
 			if (bookBean.getBookid() == bookInfo.getBookid()) {
 				return false;
 			}
 		}
-		Database.BOOK.add(bookInfo);
+		DataBase.BOOKDATABASE.add(bookInfo);
 		return true;
 	}
-
+	
 	@Override
-	public boolean isBookRemoved(int bookId) {
-		for (BooksInformation bookInfo : Database.BOOK) {
-			if (bookInfo.getBookid() == bookId) {
-				Database.BOOK.remove(bookInfo);
-				return true;
+	public boolean isBookUpdated(BooksDetails bookInfo) {
+
+		for (BooksDetails bookBean : DataBase.BOOKDATABASE) {
+			if (bookBean.getBookid() == bookInfo.getBookid()) {
+				return false;
 			}
 		}
+		DataBase.BOOKDATABASE.add(bookInfo);
 		return true;
 	}
-
+	
 	@Override
-	public BooksInformation searchBook(int bookId) {
-		for (BooksInformation bookBean : Database.BOOK) {
+	public BooksDetails searchBook(int bookId) {
+		for (BooksDetails bookBean : DataBase.BOOKDATABASE) {
 			if (bookBean.getBookid() == bookId) {
 
 				return bookBean;
@@ -75,107 +84,46 @@ public class AdminDAOImplementation implements AdminDAO {
 	}
 
 	@Override
-	public boolean isBookIssued(UserInformation user, BooksInformation book) {
-		boolean isValid = false;
-		calender.add(Calendar.DATE, 15);
-		returnDate = calender.getTime();
-		RequestInformation requestInfo = new RequestInformation();
-		int noOfBooksBorrowed = user.getNoOfBooksBorrowed();
-		for (RequestInformation info : Database.REQUEST) {
-			if (info.getUserInformation().getUserId() == user.getUserId()) {
-				if (info.getBookInformation().getBookid() == book.getBookid()) {
-					requestInfo = info;
-					isValid = true;
-				}
+	public BooksDetails searchBookByName(String bookName) {
+
+		for (BooksDetails bookInfo : DataBase.BOOKDATABASE) {
+			if (bookInfo.getBookname().equals(bookName)) {
+
+				return bookInfo;
 			}
 		}
-		if (isValid) {
-			System.out.println("I am entreing into is valid");
-
-			for (BooksInformation info2 : Database.BOOK) {
-				if (info2.getBookid() == book.getBookid()) {
-					book = info2;
-				}
-			}
-			for (UserInformation userInfo2 : Database.USERS) {
-				if (userInfo2.getUserId() == user.getUserId()) {
-					user = userInfo2;
-					noOfBooksBorrowed = user.getNoOfBooksBorrowed();
-				}
-			}
-			if (noOfBooksBorrowed <= 3) {
-				System.out.println("entered into no of books borrowed");
-				boolean isRemoved = Database.BOOK.remove(book);
-				if (isRemoved) {
-					System.out.println("book removed from list");
-					System.out.println("enter into removed");
-					noOfBooksBorrowed++;
-					System.out.println(noOfBooksBorrowed);
-					user.setNoOfBooksBorrowed(noOfBooksBorrowed);
-					requestInfo.setBookIssued(true);
-					return true;
-				} else {
-					throw new LibrarayManagementExceptions("Book can't be borrowed");
-				}
-
-			} else {
-				throw new LibrarayManagementExceptions("Student Exceeds maximum limit of 3");
-			}
-
-		} else {
-			throw new LibrarayManagementExceptions("Book data or User data is incorrect");
-
-		}
+		throw new LibrarayManagementExceptions("Search Book not found");
 	}
 
 	@Override
-	public boolean isBookReceived(UserInformation userInfo, BooksInformation bookInfo) {
+	public BooksDetails searchBookByAuthorName(String bookAuthor) {
 
-		boolean isValid = false;
-		RequestInformation requestInfo1 = new RequestInformation();
-		for (RequestInformation requestInfo : Database.REQUEST) {
-			if (requestInfo.getBookInformation().getBookid() == bookInfo.getBookid()
-					&& requestInfo.getUserInformation().getUserId() == userInfo.getUserId()
-					&& requestInfo.isBookReturned() == true) {
-				isValid = true;
-				requestInfo1 = requestInfo;
+		for (BooksDetails bookInformation : DataBase.BOOKDATABASE) {
+			if (bookInformation.getBookauthor().equals(bookAuthor)) {
+
+				return bookInformation;
 			}
 		}
-		if (isValid) {
-			bookInfo.setBookauthor(requestInfo1.getBookInformation().getBookauthor());
-			bookInfo.setBookname(requestInfo1.getBookInformation().getBookname());
-			Database.BOOK.add(bookInfo);
-			Database.REQUEST.remove(requestInfo1);
-			for (UserInformation userInfo2 : Database.USERS) {
-				if (userInfo2.getUserId() == userInfo.getUserId()) {
-					userInfo = userInfo2;
-				}
-			}
-			int noOfBooksBorrowed = userInfo.getNoOfBooksBorrowed();
-			noOfBooksBorrowed--;
-			userInfo.setNoOfBooksBorrowed(noOfBooksBorrowed);
-			return true;
-		}
-		return false;
+		throw new LibrarayManagementExceptions("Search Book not found");
 	}
 
 	@Override
-	public boolean isBookUpdated(int bookId) {
-		for (BooksInformation bookupdate : Database.BOOK) {
-			if (bookupdate.getBookid() == bookId) {
-				Database.ADMIN.contains(bookupdate);
-				return true;
-			}
-			Database.BOOK.add(bookupdate);
-			System.err.println("Book is Updating......");
+	public List<UserDetails> showAllUsers() {
+		List<UserDetails> userList = new LinkedList<UserDetails>();
+		for (UserDetails userInfo : DataBase.USERDATABASE) {
+			userInfo.getUserId();
+			userInfo.getUserName();
+			userInfo.getUserEmailId();
+			userInfo.getNoOfBooksBorrowed();
+			userList.add(userInfo);
 		}
-		return false;
+		return userList;
 	}
 
 	@Override
-	public List<BooksInformation> showAllLibraryBooks() {
-		List<BooksInformation> booksList = new LinkedList<BooksInformation>();
-		for (BooksInformation book : Database.BOOK) {
+	public List<BooksDetails> showAllLibraryBooks() {
+		List<BooksDetails> booksList = new LinkedList<BooksDetails>();
+		for (BooksDetails book : DataBase.BOOKDATABASE) {
 
 			book.getBookid();
 			book.getBookauthor();
@@ -186,28 +134,119 @@ public class AdminDAOImplementation implements AdminDAO {
 	}
 
 	@Override
-	public List<UserInformation> showAllUsers() {
-		List<UserInformation> user = new LinkedList<UserInformation>();
-		for (UserInformation userInfo : Database.USERS) {
-			userInfo.getUserId();
-			userInfo.getUserName();
-			userInfo.getUserEmailId();
-			userInfo.getNoOfBooksBorrowed();
-			user.add(userInfo);
+	public List<RequestDetails> showAllUserRequest() {
+		List<RequestDetails> requestsList = new LinkedList<RequestDetails>();
+		for (RequestDetails requestInformation : DataBase.REQUESTDATABASE) {
+			requestInformation.getBookDetails();
+			requestInformation.getUserDetails();
+			requestInformation.isBookIssued();
+			requestInformation.isBookReturned();
+			requestsList.add(requestInformation);
 		}
-		return user;
+		return requestsList;
 	}
 
 	@Override
-	public List<RequestInformation> showAllUserRequest() {
-		List<RequestInformation> request = new LinkedList<RequestInformation>();
-		for (RequestInformation requestInformation : Database.REQUEST) {
-			requestInformation.getBookInformation();
-			requestInformation.getUserInformation();
-			requestInformation.isBookIssued();
-			requestInformation.isBookReturned();
-			request.add(requestInformation);
+	public boolean isBookIssued(UserDetails user, BooksDetails book) {
+
+		boolean correct = false;
+		calendar.add(Calendar.DATE, 15);
+		expectedReturnedDate = calendar.getTime();
+		
+		RequestDetails requestdetails = new RequestDetails();
+		int noOfBooksBorrowed = user.getNoOfBooksBorrowed();
+		for (RequestDetails details : DataBase.REQUESTDATABASE) {
+			if (details.getUserDetails().getUserId() == user.getUserId()) {
+				if (details.getBookDetails().getBookid() == book.getBookid()) {
+					requestdetails = details;
+					correct = true;
+				}
+			}
 		}
-		return request;
+
+		if (correct)
+
+		{
+			for (BooksDetails info2 : DataBase.BOOKDATABASE) {
+				if (info2.getBookid() == book.getBookid()) {
+					book = info2;
+				}
+
+			}
+			for (UserDetails userInfo2 : DataBase.USERDATABASE) {
+				if (userInfo2.getUserId() == user.getUserId()) {
+					user = userInfo2;
+					noOfBooksBorrowed = user.getNoOfBooksBorrowed();
+				}
+			}
+			if (noOfBooksBorrowed < 2) {
+				boolean isRemoved = DataBase.BOOKDATABASE.remove(book);
+				if (isRemoved) {
+					++noOfBooksBorrowed;
+					System.out.println(noOfBooksBorrowed);
+					user.setNoOfBooksBorrowed(noOfBooksBorrowed);
+					requestdetails.setBookIssued(true);
+					requestdetails.setBookIssuedDate(issueDate);
+					requestdetails.setBookReturndate(expectedReturnedDate);
+					return true;
+				}
+
+			}
+
+		}
+		throw new LibrarayManagementExceptions("you might have enetered in valid user or book details");
 	}
+
+	@Override
+	public boolean isBookReceived(UserDetails userInfo, BooksDetails bookInfo) {
+
+		boolean correct = false;
+		RequestDetails requestDetails = new RequestDetails();
+		for (RequestDetails details : DataBase.REQUESTDATABASE) {
+
+			if (details.getBookDetails().getBookid() == bookInfo.getBookid()
+					&& details.getUserDetails().getUserId() == userInfo.getUserId()
+					&& details.isBookReturned() == true) {
+				correct = true;
+				requestDetails = details;
+
+			}
+		}
+		if (correct) {
+			calendar.add(Calendar.DATE, 15);
+			actualReturnDate = calendar.getTime();
+
+			bookInfo.setBookauthor(requestDetails.getBookDetails().getBookauthor());
+			bookInfo.setBookname(requestDetails.getBookDetails().getBookname());
+			DataBase.BOOKDATABASE.add(bookInfo);
+			DataBase.REQUESTDATABASE.remove(requestDetails);
+
+			for (UserDetails userInfo2 : DataBase.USERDATABASE) {
+				if (userInfo2.getUserId() == userInfo.getUserId()) {
+					userInfo = userInfo2;
+				}
+			}
+			int noOfBooksBorrowed = userInfo.getNoOfBooksBorrowed();
+			noOfBooksBorrowed--;
+			userInfo.setNoOfBooksBorrowed(noOfBooksBorrowed);
+			if (actualReturnDate.after(issueDate)) {
+				userInfo.setFine(5.0);
+			}
+			return true;
+		}
+		throw new LibrarayManagementExceptions("Book not received");
+	}
+
+	@Override
+	public boolean isBookRemoved(int bookId) {
+
+		for (BooksDetails bookInfo : DataBase.BOOKDATABASE) {
+			if (bookInfo.getBookid() == bookId) {
+				DataBase.BOOKDATABASE.remove(bookInfo);
+				return true;
+			}
+		}
+		return true;
+	}
+
 }

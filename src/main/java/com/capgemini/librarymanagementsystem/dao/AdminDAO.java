@@ -1,34 +1,37 @@
 package com.capgemini.librarymanagementsystem.dao;
 
 import java.util.List;
-
-import com.capgemini.librarymanagementsystem.dto.Admininformation;
-import com.capgemini.librarymanagementsystem.dto.BooksInformation;
-import com.capgemini.librarymanagementsystem.dto.RequestInformation;
-import com.capgemini.librarymanagementsystem.dto.UserInformation;
+import com.capgemini.librarymanagementsystem.dto.AdminDetails;
+import com.capgemini.librarymanagementsystem.dto.BooksDetails;
+import com.capgemini.librarymanagementsystem.dto.RequestDetails;
+import com.capgemini.librarymanagementsystem.dto.UserDetails;
 
 public interface AdminDAO {
 
-	public boolean register(UserInformation user);
+	AdminDetails adminLogin(String adminEmailId, String adminPassword);
 
-	Admininformation adminLogin(String adminEmailId, String adminPassword);
+	public boolean enrollUser(UserDetails user);
 
-	boolean isBookAdded(BooksInformation bookInfo);
+	boolean isBookAdded(BooksDetails bookInfo);
+	
+	boolean isBookUpdated(BooksDetails bookInfo);	
+
+	BooksDetails searchBook(int bookId);
+
+	BooksDetails searchBookByName(String bookName);
+
+	BooksDetails searchBookByAuthorName(String bookAuthor);
+
+	List<UserDetails> showAllUsers();
+
+	List<BooksDetails> showAllLibraryBooks();
+
+	List<RequestDetails> showAllUserRequest();
+
+	boolean isBookIssued(UserDetails user, BooksDetails book);
+
+	boolean isBookReceived(UserDetails userInfo, BooksDetails bookInfo);
 
 	boolean isBookRemoved(int bookId);
-
-	BooksInformation searchBook(int bookId);
-
-	boolean isBookIssued(UserInformation user, BooksInformation book);
-
-	boolean isBookReceived(UserInformation userInfo, BooksInformation bookInfo);
-
-	boolean isBookUpdated(int bookId);
-
-	List<BooksInformation> showAllLibraryBooks();
-
-	List<UserInformation> showAllUsers();
-
-	List<RequestInformation> showAllUserRequest();
 
 }

@@ -4,17 +4,14 @@ import com.capgemini.librarymanagementsystem.dao.AdminDAO;
 import com.capgemini.librarymanagementsystem.dao.AdminDAOImplementation;
 import com.capgemini.librarymanagementsystem.dao.UserDAO;
 import com.capgemini.librarymanagementsystem.dao.UserDAOImplementation;
-import com.capgemini.librarymanagementsystem.dto.Admininformation;
-import com.capgemini.librarymanagementsystem.dto.BooksInformation;
-import com.capgemini.librarymanagementsystem.dto.UserInformation;
-import com.capgemini.librarymanagementsystem.exception.LibrarayManagementExceptions;
 import com.capgemini.librarymanagementsystem.service.AdminService;
 import com.capgemini.librarymanagementsystem.service.AdminServiceImplementation;
 import com.capgemini.librarymanagementsystem.service.UserService;
 import com.capgemini.librarymanagementsystem.service.UserServiceImplementation;
+
 import com.capgemini.librarymanagementsystem.validation.LibraryManagementValidation;
 
-public class LMSFactory {
+public class LibraryManagmentSystemFactory {
 
 	public static AdminDAO getadminDao() {
 		return new AdminDAOImplementation();
@@ -33,5 +30,10 @@ public class LMSFactory {
 		return new UserServiceImplementation();
 
 	}
+	public static LibraryManagementValidation getLibraryManagementValidation() {
+		return new LibraryManagementValidation();
+		
+	}
+	
 
 }

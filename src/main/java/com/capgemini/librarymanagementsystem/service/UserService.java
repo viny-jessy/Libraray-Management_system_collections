@@ -1,17 +1,21 @@
 package com.capgemini.librarymanagementsystem.service;
 
-import com.capgemini.librarymanagementsystem.dto.BooksInformation;
-import com.capgemini.librarymanagementsystem.dto.RequestInformation;
-import com.capgemini.librarymanagementsystem.dto.UserInformation;
+import com.capgemini.librarymanagementsystem.dto.BooksDetails;
+import com.capgemini.librarymanagementsystem.dto.RequestDetails;
+import com.capgemini.librarymanagementsystem.dto.UserDetails;
 
 public interface UserService {
 
-	UserInformation userLogin(String userEmailId, String userPassword);
+	UserDetails userLogin(String userEmailId, String userPassword);
 
-	BooksInformation bookSearch(int bookId);
+	BooksDetails bookSearch(int bookId);
 
-	RequestInformation bookRequest(UserInformation userInfo, BooksInformation bookInfo);
+	BooksDetails searchBookByName(String bookName);
 
-	RequestInformation bookReturn(UserInformation userInfo, BooksInformation bookInfo);
+	BooksDetails searchBookByAuthorName(String bookAuthorName);
+
+	RequestDetails bookRequest(UserDetails userInfo, BooksDetails bookInfo);
+
+	RequestDetails bookReturn(UserDetails userInfo, BooksDetails bookInfo);
 
 }

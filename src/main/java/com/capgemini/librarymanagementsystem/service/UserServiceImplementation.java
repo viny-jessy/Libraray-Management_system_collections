@@ -1,36 +1,49 @@
 package com.capgemini.librarymanagementsystem.service;
 
 import com.capgemini.librarymanagementsystem.dao.UserDAO;
-import com.capgemini.librarymanagementsystem.dto.BooksInformation;
-import com.capgemini.librarymanagementsystem.dto.RequestInformation;
-import com.capgemini.librarymanagementsystem.dto.UserInformation;
-import com.capgemini.librarymanagementsystem.factory.LMSFactory;
+import com.capgemini.librarymanagementsystem.dto.BooksDetails;
+import com.capgemini.librarymanagementsystem.dto.RequestDetails;
+import com.capgemini.librarymanagementsystem.dto.UserDetails;
+import com.capgemini.librarymanagementsystem.factory.LibraryManagmentSystemFactory;
 
 public class UserServiceImplementation implements UserService {
 
-	private UserDAO dao = LMSFactory.getuserDao();
+	private UserDAO dao = LibraryManagmentSystemFactory.getuserDao();
 
 	@Override
-	public UserInformation userLogin(String userEmailId, String userPassword) {
+	public UserDetails userLogin(String userEmailId, String userPassword) {
 
 		return dao.userLogin(userEmailId, userPassword);
 	}
 
 	@Override
-	public BooksInformation bookSearch(int bookId) {
+	public BooksDetails bookSearch(int bookId) {
 
 		return dao.bookSearch(bookId);
 	}
 
 	@Override
-	public RequestInformation bookRequest(UserInformation userInfo, BooksInformation bookInfo) {
+	public BooksDetails searchBookByName(String bookName) {
+
+		return dao.searchBookByName(bookName);
+	}
+
+	@Override
+	public BooksDetails searchBookByAuthorName(String bookAuthorName) {
+
+		return dao.searchBookByAuthorName(bookAuthorName);
+	}
+
+	@Override
+	public RequestDetails bookRequest(UserDetails userInfo, BooksDetails bookInfo) {
 
 		return dao.bookRequest(userInfo, bookInfo);
 	}
 
 	@Override
-	public RequestInformation bookReturn(UserInformation userInfo, BooksInformation bookInfo) {
+	public RequestDetails bookReturn(UserDetails userInfo, BooksDetails bookInfo) {
 
 		return dao.bookReturn(userInfo, bookInfo);
 	}
+
 }

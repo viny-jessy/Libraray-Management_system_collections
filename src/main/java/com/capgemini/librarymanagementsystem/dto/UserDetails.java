@@ -3,12 +3,14 @@ package com.capgemini.librarymanagementsystem.dto;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class UserInformation implements Serializable {
+public class UserDetails implements Serializable {
+
 	private int userId;
 	private String userName;
 	private String userEmailId;
 	private String userPassword;
-	private int noOfBooksBorrowed;
+	private int noOfBooksBorrowed = 0;
+	private double fine;
 
 	public int getUserId() {
 		return userId;
@@ -49,6 +51,13 @@ public class UserInformation implements Serializable {
 	public void setNoOfBooksBorrowed(int noOfBooksBorrowed) {
 		this.noOfBooksBorrowed = noOfBooksBorrowed;
 	}
-	
+
+	public double getFine() {
+		return fine;
+	}
+
+	public void setFine(double fine) {
+		this.fine = fine;
+	}
 
 }
